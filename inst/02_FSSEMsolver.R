@@ -1,9 +1,9 @@
 ##' FSSEMsolver
 seed = as.numeric(Sys.time())
 N  = 100                                                              # sample size. 500 sample better than 200 sample, very very
-Ng = 10                                                               # gene number
-Nk = 10 * 3                                                           # eQTL number
-Ns = 10 / Ng                                                          # sparse ratio
+Ng = 100                                                              # gene number
+Nk = 100 * 3                                                          # eQTL number
+Ns = 100 / Ng                                                          # sparse ratio
 sigma2 = 0.01                                                         # sigma2
 set.seed(seed)
 library(fssemR)
@@ -27,10 +27,10 @@ system.time(fitc <<- multiFSSEMiPALM(Xs = Xs, Ys = Ys, Bs = fit$Bs, Fs = fit$Fs,
                             p = Ng, maxit = 100, threshold = 1e-5, sparse = T, verbose = T, trans = T, strict = F))
 
 
-(TPR(fitc$B[[1]], data$Vars$B[[1]]) + TPR(fitc$B[[2]], data$Vars$B[[2]])) / 2
-(FDR(fitc$B[[1]], data$Vars$B[[1]]) + FDR(fitc$B[[2]], data$Vars$B[[2]])) / 2
-TPR(fitc$B[[1]] - fitc$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
-FDR(fitc$B[[1]] - fitc$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+(TPR(fitc$Bs[[1]], data$Vars$B[[1]]) + TPR(fitc$Bs[[2]], data$Vars$B[[2]])) / 2
+(FDR(fitc$Bs[[1]], data$Vars$B[[1]]) + FDR(fitc$Bs[[2]], data$Vars$B[[2]])) / 2
+TPR(fitc$Bs[[1]] - fitc$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+FDR(fitc$Bs[[1]] - fitc$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
 
 
 fitm <- opt.multiFSSEMiPALM(Xs = Xs, Ys = Ys, Bs = fit$Bs, Fs = fit$Fs, Sk = Sk,
@@ -39,10 +39,10 @@ fitm <- opt.multiFSSEMiPALM(Xs = Xs, Ys = Ys, Bs = fit$Bs, Fs = fit$Fs, Sk = Sk,
 
 fitc0 <- fitm$fit
 
-(TPR(fitc0$B[[1]], data$Vars$B[[1]]) + TPR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-(FDR(fitc0$B[[1]], data$Vars$B[[1]]) + FDR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-TPR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
-FDR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+(TPR(fitc0$Bs[[1]], data$Vars$B[[1]]) + TPR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+(FDR(fitc0$Bs[[1]], data$Vars$B[[1]]) + FDR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+TPR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+FDR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
 
 
 

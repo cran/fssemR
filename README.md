@@ -1,4 +1,7 @@
 ## Introduction
+[![CRAN status](https://www.r-pkg.org/badges/version/fssemR)](https://cran.r-project.org/package=fssemR)
+[![CRAN download](https://cranlogs.r-pkg.org/badges/fssemR)](https://cranlogs.r-pkg.org/badges/fssemR)
+
 
 `fssemR` is a package that ultilizes the Proximal Alternating Linearized Maximal to solve the 
 non-convex non-smooth jointly fused sparse structrual equation model. 
@@ -18,8 +21,8 @@ library(devtools)
 install_github("Ivis4ml/fssemR")
 ```
 
-Now, `fssemR` package is available on CRAN. So you also can install it via CRAN 
+Now, `fssemR` package is uploaded on CRAN. So you will install it via CRAN 
 
 ```r
-install.package("fssemR")
+install.packages("fssemR")
 ```

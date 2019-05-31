@@ -62,10 +62,10 @@
 ##'                           verbose = TRUE, trans = TRUE, strict = TRUE)
 ##'
 ##'
-##' (TPR(fitc0$B[[1]], data$Vars$B[[1]]) + TPR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-##' (FDR(fitc0$B[[1]], data$Vars$B[[1]]) + FDR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-##' TPR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
-##' FDR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+##' (TPR(fitc0$Bs[[1]], data$Vars$B[[1]]) + TPR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+##' (FDR(fitc0$Bs[[1]], data$Vars$B[[1]]) + FDR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+##' TPR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+##' FDR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
 ##' @export
 multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, lambda, rho,
                            Wl, Wf, p, maxit = 100, inert = inert_opt("linear"), threshold = 1e-6,
@@ -149,11 +149,25 @@ multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, lambda, rho,
         grad = cwiseGradient4FSSEM(n[k], ci[[k]], Ys[[k]][i, ,drop = F], Ri[[k]], Y2norm[[k]][i],sigma2[1])
         grad(bi[[k]])[-i, , drop = F]
       })
+      # `cwiseLipschitz4FSSEM` is the improved version of `lips_cwise_SML` and `lips_rwise_SML` in
+      # ./inst/00_SparsemaximumLiklihood.R; `multiFSSEMiPALM2` is equivalent to `genSML_iPALM` in
+      # deprecated version @ https://github.com/Ivis4ml/FSSEM
+      ## Li = sapply(1:m, function(k) {
+      ##   U = crossprod(ImBs[[k]][, -i])
+      ##   cwiseLipschitzFSSEMv0(n[k], chol2inv(U),
+      ##                    ImBs[[k]][-i, -i],
+      ##                    ImBs[[k]][i, -i, drop = F],
+      ##                    sum((ci[[k]] * Dets[[k]]) ^ 2),
+      ##                    det(U),
+      ##                    Y2norm[[k]][i],
+      ##                    sigma2, p)[1]
+      ##})
       Li = sapply(1:m, function(k) {
         z  = ci[[k]][,i] * Dets[[k]]
         c2 = sum((ci[[k]][, -i] * Dets[[k]])**2)
         b2 = B2norm[[k]][i]
-        cwiseLipschitz4FSSEM(n[k], z, c2, b2, Y2norm[[k]][i], sigma2)
+        ## cwiseLipschitz4FSSEM(n[k], z, c2, b2, Y2norm[[k]][i], sigma2)
+        cwiseLipschitz4FSSEM2B(n[k], z, c2, b2, Y2norm[[k]][i], sigma2, ImBs[[k]], i)
       })
       Li = norm(Li, "2")
       ## Armoji-scheme line-search
@@ -345,23 +359,25 @@ cv.multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20, nrho = 
   ## cv on nfold
   params = vector("list", nlambda * nrho)
   cverr  = vector("list", nlambda * nrho)
-  cvfold = sample(seq(1, nfold), size = n, replace = T)
+  cvfold = lapply(1:m, function(i) {
+    sample(seq(1, nfold), size = n[i], replace = T)
+  })
   Xtrain = vector("list", nfold)
   Xtest  = vector("list", nfold)
   Ytrain = vector("list", nfold)
   Ytest  = vector("list", nfold)
   for (i in 1:nfold) {
-    Xtrain[[i]] = lapply(Xs, function(X) {
-      X[, cvfold != i, drop = F]
+    Xtrain[[i]] = lapply(1:m, function(mi) {
+      Xs[[mi]][, cvfold[[mi]] != i, drop = F]
     })
-    Xtest[[i]]  = lapply(Xs, function(X) {
-      X[, cvfold == i, drop = F]
+    Xtest[[i]]  = lapply(1:m, function(mi) {
+      Xs[[mi]][, cvfold[[mi]] == i, drop = F]
     })
-    Ytrain[[i]] = lapply(Ys, function(Y) {
-      Y[, cvfold != i, drop = F]
+    Ytrain[[i]] = lapply(1:m, function(mi) {
+      Ys[[mi]][, cvfold[[mi]] != i, drop = F]
     })
-    Ytest[[i]]  = lapply(Ys, function(Y) {
-      Y[, cvfold == i, drop = F]
+    Ytest[[i]]  = lapply(1:m, function(mi) {
+      Ys[[mi]][, cvfold[[mi]] == i, drop = F]
     })
   }
   for (i in 1:nfold) {
@@ -450,10 +466,10 @@ cv.multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20, nrho = 
 ##'
 ##' fitc0 <- fitm$fit
 ##'
-##' (TPR(fitc0$B[[1]], data$Vars$B[[1]]) + TPR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-##' (FDR(fitc0$B[[1]], data$Vars$B[[1]]) + FDR(fitc0$B[[2]], data$Vars$B[[2]])) / 2
-##' TPR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
-##' FDR(fitc0$B[[1]] - fitc0$B[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+##' (TPR(fitc0$Bs[[1]], data$Vars$B[[1]]) + TPR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+##' (FDR(fitc0$Bs[[1]], data$Vars$B[[1]]) + FDR(fitc0$Bs[[2]], data$Vars$B[[2]])) / 2
+##' TPR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
+##' FDR(fitc0$Bs[[1]] - fitc0$Bs[[2]], data$Vars$B[[1]] - data$Vars$B[[2]])
 opt.multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20, nrho = 20,
                                p, q, wt = TRUE) {
   m   = length(Ys)
@@ -505,7 +521,12 @@ opt.multiFSSEMiPALM2 = function(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20, nrho =
   BICmat = data.frame(do.call(rbind, params))
   colnames(BICmat) = c("lambda", "rho", "BIC")
   BICmin = which.min(BICmat$BIC)
-  list(lambda = BICmat[BICmin, 1], rho = BICmat[BICmin, 2], fit = fit[[BICmin]],
+  fitmin = fit[[BICmin]]
+  for(i in 1:m) {
+    fitmin$Bs[[i]] = Matrix(fitmin$Bs[[i]], sparse = TRUE)
+    fitmin$Fs[[i]] = Matrix(fitmin$Fs[[i]], sparse = TRUE)
+  }
+  list(lambda = BICmat[BICmin, 1], rho = BICmat[BICmin, 2], fit = fitmin,
        minBIC = min(BICmat$BIC), fit = fit, BICs = BICmat)
 }
 
