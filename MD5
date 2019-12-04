@@ -1,4 +1,4 @@
-5996d66220c7eb8a5af75e454fd52b12 *DESCRIPTION
+85134a30a6bf1e08a1b1679c060121f2 *DESCRIPTION
 72edf37ad7956ee2fcaacf9c918d5810 *NAMESPACE
 ee41067ea16bfbb973ca91ee55bf9262 *R/fssem.R
 70535f87f639a0729720e1fa15cf3e5e *R/fssemR-package.R
@@ -20,7 +20,7 @@ d190189f730f4617efcf5843ef052839 *inst/06_RunMatrixEQTL.R
 b50f4d6077e06d77bdecabaa72d28585 *inst/README.md
 da59c1f123970e19c04978d90c70ea05 *inst/doc/fssemR.R
 aedee6fb6c374d04328916b20dd090f1 *inst/doc/fssemR.Rmd
-f5b1d05c328c2d1fda4d861d5f942a6b *inst/doc/fssemR.pdf
+37218c655b126b300ecc39b7db2e581b *inst/doc/fssemR.pdf
 71c5bfa40c7c0adee4d1034b7987d3f2 *man/FDR.Rd
 7f882645c910d60ac9ab3bf339261fc6 *man/TPR.Rd
 c9408be95df652d0ab713b83e5596e8b *man/cv.multiFSSEMiPALM.Rd
@@ -52,7 +52,7 @@ e41273d6024449e3adec1d0c3f7769b1 *man/randomFSSEMdata2.Rd
 bf2a5bb0f37c008ce61402d43ef7cccf *src/LR.h
 097dae0a2b82f108f49bc59e8585a578 *src/Makevars
 097dae0a2b82f108f49bc59e8585a578 *src/Makevars.win
-f0c3ef46281586921cf842703a122c19 *src/MatOp.h
+78127f3a26765c10c80bf5ada178af44 *src/MatOp.h
 a0e55f98ec101a7ab230fc4f9575129c *src/fssemR.cpp
 77cf5a583797d9904bacfa9b30b95cdd *src/fssemR.h
 aedee6fb6c374d04328916b20dd090f1 *vignettes/fssemR.Rmd
