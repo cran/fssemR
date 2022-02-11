@@ -1,4 +1,4 @@
-## Introduction
+## fssemR
 [![CRAN status](https://www.r-pkg.org/badges/version/fssemR)](https://cran.r-project.org/package=fssemR)
 [![CRAN download](https://cranlogs.r-pkg.org/badges/fssemR)](https://cranlogs.r-pkg.org/badges/fssemR)
 
@@ -26,3 +26,13 @@ Now, `fssemR` package is uploaded on CRAN. So you will install it via CRAN
 ```r
 install.packages("fssemR")
 ```
+
+## Vignette
+[fssemR-introduction](https://github.com/Ivis4ml/fssemR/blob/master/inst/doc/fssemR.pdf)
+
+## Citation
+Xin Zhou, Xiaodong Cai, Inference of differential gene regulatory networks based on gene expression and genetic perturbation data, Bioinformatics, , btz529, https://doi.org/10.1093/bioinformatics/btz529
+
+## Update
+Upgrade to Eigen 0.3.4 compatible
+

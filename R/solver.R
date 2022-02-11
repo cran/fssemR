@@ -478,7 +478,7 @@ cv.multiFSSEMiPALM = function(Xs, Ys, Bs, Fs, Sk, sigma2, nlambda = 20, nrho = 2
   ## cv on nfold
   params = vector("list", nlambda * nrho)
   cverr  = vector("list", nlambda * nrho)
-  cvfold = sample(seq(1, nfold), size = n, replace = T)
+  cvfold = sample(seq(1, nfold), size = n[1], replace = T)
   Xtrain = vector("list", nfold)
   Xtest  = vector("list", nfold)
   Ytrain = vector("list", nfold)

@@ -4,10 +4,12 @@
 \name{fssemR}
 \alias{fssemR}
 \alias{package-fssemR}
-\alias{fssemR-package}
 \title{Solving Sparse Structural Equation Model}
 \description{
-Solving Sparse Structural Equation Model
+An optimizer of Fused-Sparse Structural Equation Models, which is 
+ the state of the art jointly fused sparse maximum likelihood function 
+ for structural equation models proposed by Xin Zhou and Xiaodong Cai (2018 
+ <doi:10.1101/466623>)
 }
 \examples{
 seed = as.numeric(Sys.time())
